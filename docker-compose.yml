@@ -1,0 +1,95 @@
+services:
+    service-web:
+        image: nginx:1.27
+        volumes:
+            - ./:/var/www
+            - ./docker/development/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        ports:
+            - "8080:80"
+        environment:
+            - NGINX_HOST=localhost
+        networks:
+            - sport-event-manager-network
+        depends_on:
+            # service-redis:
+               # condition: service_started
+            php-fpm:
+                condition: service_started
+
+    php-fpm:
+        build:
+            context: .
+            dockerfile: ./docker/common/php-fpm/Dockerfile
+            target: development
+            args:
+                UID: ${UID:-1000}
+                GID: ${GID:-1000}
+                XDEBUG_ENABLED: ${XDEBUG_ENABLED:-true}
+                XDEBUG_MODE: develop,coverage,debug,profile
+                XDEBUG_HOST: ${XDEBUG_HOST:-host.docker.internal}
+                XDEBUG_IDE_KEY: ${XDEBUG_IDE_KEY:-DOCKER}
+                XDEBUG_LOG: /dev/stdout
+                XDEBUG_LOG_LEVEL: 0
+        env_file:
+            - .env
+        user: "${UID:-1000}:${GID:-1000}"
+        volumes:
+            - ./:/var/www
+        networks:
+            - sport-event-manager-network
+        depends_on:
+            #service-redis:
+            #    condition: service_started
+            service-mysql:
+                condition: service_started
+
+    workspace:
+        build:
+            context: .
+            dockerfile: ./docker/development/workspace/Dockerfile
+            args:
+                UID: ${UID:-1000}
+                GID: ${GID:-1000}
+                XDEBUG_ENABLED: ${XDEBUG_ENABLED:-true}
+                XDEBUG_MODE: develop,coverage,debug,profile
+                XDEBUG_HOST: ${XDEBUG_HOST:-host.docker.internal}
+                XDEBUG_IDE_KEY: ${XDEBUG_IDE_KEY:-DOCKER}
+                XDEBUG_LOG: /dev/stdout
+                XDEBUG_LOG_LEVEL: 0
+        tty: true
+        stdin_open: true
+        env_file:
+            - .env
+        volumes:
+            - ./:/var/www
+        networks:
+            - sport-event-manager-network
+
+    service-mysql:
+        image: mysql:8.4.3
+        restart: always
+        container_name: sport-event-manager-container
+        environment:
+            MYSQL_DATABASE: 'sports-event-manager'
+            MYSQL_USER: 'sports-event-manager-user'
+            MYSQL_PASSWORD: 'user'
+            MYSQL_ROOT_PASSWORD: 'admin'
+        ports:
+            - '3306:3306'
+        expose:
+            - '3306'
+        volumes:
+            - sports-event-manager-data:/var/lib/mysql
+        networks:
+            - sport-event-manager-network
+
+    service-redis:
+        image: redis:7.4.2
+        networks:
+            - sport-event-manager-network
+
+networks:
+    sport-event-manager-network:
+
+volumes:
+    sports-event-manager-data:
