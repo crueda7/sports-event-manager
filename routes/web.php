@@ -21,5 +21,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.delete');
 });
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/users', [RoleController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [RoleController::class, 'create'])->name('users.create');
+    Route::post('/users', [RoleController::class, 'store'])->name('users.store');
+    Route::get('/users/{user}/edit', [RoleController::class, 'edit'])->name('users.edit');
+    Route::put('/users/{user}', [RoleController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [RoleController::class, 'destroy'])->name('users.delete');
+});
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
