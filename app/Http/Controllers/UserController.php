@@ -2,7 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -12,7 +17,7 @@ class UserController extends Controller
     public function index()
     {
         return Inertia::render('users/Index', [
-            'users' => User::all(),
+            'users' => User::with('role:id,name')->get()
         ]);
     }
 
@@ -21,7 +26,11 @@ class UserController extends Controller
      */
     public function create()
     {
-        return Inertia::render('users/Create');
+        $roles = Role::select('id', 'name')->get();
+
+        return Inertia::render('users/Create', [
+            'roles' => $roles,
+        ]);
     }
 
     /**
@@ -34,7 +43,7 @@ class UserController extends Controller
             'phone' => 'nullable|string|max:15',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'rol_id' => 'required|exists:roles,id',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
         User::create($request->all());
@@ -55,8 +64,11 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $roles = Role::select('id', 'name')->get();
+
         return Inertia::render('users/Edit', [
-            'user' => $user
+            'user' => $user,
+            'roles' => $roles,
         ]);
     }
 
@@ -65,15 +77,20 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:15',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'rol_id' => 'required|exists:roles,id',
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+            'role_id' => 'required|exists:roles,id',
         ]);
 
-        $user->update($request->all());
+        if (!empty($validated['password'])) {
+            $validated['password'] = Hash::make($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $user->update($validated);
 
         return redirect()->route('users.index');
     }
