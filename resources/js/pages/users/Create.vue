@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import InputError from '@/components/InputError.vue';
-import TextLink from '@/components/TextLink.vue';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import AuthBase from '@/layouts/AuthLayout.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import { Head, usePage, useForm } from '@inertiajs/vue3';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import InputError from '@/components/InputError.vue';
 import { LoaderCircle } from 'lucide-vue-next';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { type SharedData, type Role } from '@/types';
 import { computed } from 'vue';
 
@@ -26,22 +25,28 @@ const form = useForm({
     password_confirmation: '',
 });
 
+type BreadcrumbItem = { title: string, href: string };
+const breadcrumbs: BreadcrumbItem[] = [
+    { title: 'Users', href: '/users' },
+    { title: 'Create', href: '#' }
+];
+
 const submit = () => {
-    form.post(route('register'), {
+    form.post(route('users.store'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
 </script>
 
 <template>
-    <AuthBase title="Create an account" description="Enter your details below to create your account">
-        <Head title="Register" />
+    <Head title="Create User"></Head>
 
-        <form @submit.prevent="submit" class="flex flex-col gap-6">
-            <div class="grid gap-6">
-                <div class="grid gap-2">
+    <AppLayout :breadcrumbs="breadcrumbs">
+        <div class="flex flex-1 flex-col gap-4 rounded-xl p-4">
+            <form @submit.prevent="submit" class="space-y-6 max-w-lg">
+                <div class="space-y-2">
                     <Label for="name">Name</Label>
-                    <Input id="name" type="text" required autofocus :tabindex="1" autocomplete="name" v-model="form.name" placeholder="Full name" />
+                    <Input id="name" type="text" required :tabindex="1" autocomplete="name" v-model="form.name" placeholder="Full name" />
                     <InputError :message="form.errors.name" />
                 </div>
 
@@ -95,16 +100,14 @@ const submit = () => {
                     <InputError :message="form.errors.password_confirmation" />
                 </div>
 
-                <Button type="submit" class="mt-2 w-full" tabindex="6" :disabled="form.processing">
-                    <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
-                    Create account
-                </Button>
-            </div>
-
-            <div class="text-center text-sm text-muted-foreground">
-                Already have an account?
-                <TextLink :href="route('login')" class="underline underline-offset-4" :tabindex="7">Log in</TextLink>
-            </div>
-        </form>
-    </AuthBase>
+                <div class="flex gap-2">
+                    <Button type="submit" class="bg-blue-500 text-white hover:bg-blue-700" tabindex="6" :disabled="form.processing">
+                        <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
+                        Save
+                    </Button>
+                    <Button as="a" href="/users" variant="outline">Cancel</Button>
+                </div>
+            </form>
+        </div>
+    </AppLayout>
 </template>
