@@ -4,9 +4,14 @@ import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { BookOpen, Folder, LayoutGrid, UserRoundCog, UsersRound } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import { computed } from 'vue';
+import type { SharedData } from '@/types';
+
+const { props } = usePage<SharedData>();
+const role = computed(() => props.auth?.role ?? '');
 
 const mainNavItems: NavItem[] = [
     {
@@ -18,18 +23,20 @@ const mainNavItems: NavItem[] = [
         title: 'Roles',
         href: '/roles',
         icon: UserRoundCog,
+        roles: ['Administrator'],
     },
     {
         title: 'Users',
         href: '/users',
         icon: UsersRound,
+        roles: ['Administrator'],
     },
 ];
 
 const footerNavItems: NavItem[] = [
     {
         title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
+        href: 'https://github.com/crueda7/sports-event-manager',
         icon: Folder,
     },
     {
@@ -38,6 +45,12 @@ const footerNavItems: NavItem[] = [
         icon: BookOpen,
     },
 ];
+
+const filteredNavItems = computed(() =>
+    mainNavItems.filter(item =>
+        !item.roles || item.roles.includes(role.value)
+    )
+);
 </script>
 
 <template>
@@ -55,7 +68,7 @@ const footerNavItems: NavItem[] = [
         </SidebarHeader>
 
         <SidebarContent>
-            <NavMain :items="mainNavItems" />
+            <NavMain :items="filteredNavItems" />
         </SidebarContent>
 
         <SidebarFooter>
