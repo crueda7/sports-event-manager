@@ -8,7 +8,7 @@ return [
     'throttle' => 'Demasiados intentos de acceso. Por favor intente nuevamente en :seconds segundos.',
     'login' => [
         'title' => 'Acceda a su cuenta',
-        'decription' => 'Introduce tu email y contraseña para acceder',
+        'description' => 'Introduce tu email y contraseña para acceder',
         'head' => 'Acceda',
         'email' => 'Correo electrónico',
         'password' => 'Contraseña',

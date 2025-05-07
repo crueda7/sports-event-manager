@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useAppearance } from '@/composables/useAppearance';
-import { Monitor, Moon, Sun } from 'lucide-vue-next';
+import { useLanguage } from '@/composables/useLanguage';
+import { BookA, BookType } from 'lucide-vue-next';
 import { trans } from '../helpers/translate';
 
 interface Props {
@@ -9,12 +9,11 @@ interface Props {
 
 const { class: containerClass = '' } = defineProps<Props>();
 
-const { appearance, updateAppearance } = useAppearance();
+const { language, updateLanguage } = useLanguage();
 
 const tabs = [
-    { value: 'light', Icon: Sun, label: trans('settings.appearance.light') },
-    { value: 'dark', Icon: Moon, label: trans('settings.appearance.dark') },
-    { value: 'system', Icon: Monitor, label: trans('settings.appearance.system') },
+    { value: 'es', Icon: BookA, label: trans('settings.language.spanish') },
+    { value: 'en', Icon: BookType, label: trans('settings.language.english') },
 ] as const;
 </script>
 
@@ -23,10 +22,10 @@ const tabs = [
         <button
             v-for="{ value, Icon, label } in tabs"
             :key="value"
-            @click="updateAppearance(value)"
+            @click="updateLanguage(value)"
             :class="[
                 'flex items-center rounded-md px-3.5 py-1.5 transition-colors',
-                appearance === value
+                language === value
                     ? 'bg-white shadow-sm dark:bg-neutral-700 dark:text-neutral-100'
                     : 'text-neutral-500 hover:bg-neutral-200/60 hover:text-black dark:text-neutral-400 dark:hover:bg-neutral-700/60',
             ]"

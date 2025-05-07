@@ -1,41 +1,28 @@
 <script setup lang="ts">
-import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, UserRoundCog, UsersRound } from 'lucide-vue-next';
+import { LayoutGrid, UserRoundCog, UsersRound } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
+import { trans } from '../helpers/translate';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: trans('app.sidebar.dashboard'),
         href: '/dashboard',
         icon: LayoutGrid,
     },
     {
-        title: 'Roles',
+        title: trans('app.sidebar.roles'),
         href: '/roles',
         icon: UserRoundCog,
     },
     {
-        title: 'Users',
+        title: trans('app.sidebar.users'),
         href: '/users',
         icon: UsersRound,
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Github Repo',
-        href: 'https://github.com/laravel/vue-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: '',
-        icon: BookOpen,
     },
 ];
 </script>
@@ -59,7 +46,6 @@ const footerNavItems: NavItem[] = [
         </SidebarContent>
 
         <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
             <NavUser />
         </SidebarFooter>
     </Sidebar>

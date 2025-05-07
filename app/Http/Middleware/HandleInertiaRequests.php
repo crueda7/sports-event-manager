@@ -53,6 +53,7 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'translations' => fn () => $this->loadTranslations(),
+            'appLocale' => fn () => App::getLocale(),
         ];
     }
 

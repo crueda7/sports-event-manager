@@ -10,6 +10,7 @@ import { Head, usePage, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
 import { type SharedData, type Role } from '@/types';
 import { computed } from 'vue';
+import { trans } from '../../helpers/translate';
 
 interface RolePageProps extends SharedData {
     roles: Role[];
@@ -17,8 +18,6 @@ interface RolePageProps extends SharedData {
 
 const { props } = usePage<RolePageProps>();
 const roles = computed(() => props.roles);
-const { translations } = usePage().props;
-const trans = translations.auth.register;
 
 const form = useForm({
     name: '',
@@ -36,28 +35,28 @@ const submit = () => {
 </script>
 
 <template>
-    <AuthBase :title="trans.title" :description="trans.description">
-        <Head :title="trans.head" />
+    <AuthBase :title="trans('auth.register.title')" :description="trans('auth.register.description')">
+        <Head :title="trans('auth.register.head')" />
 
         <form @submit.prevent="submit" class="flex flex-col gap-6">
             <div class="grid gap-6">
                 <div class="grid gap-2">
-                    <Label for="name">{{ trans.name }}</Label>
-                    <Input id="name" type="text" autofocus :tabindex="1" autocomplete="name" v-model="form.name" placeholder="Name Example" />
+                    <Label for="name">{{ trans('auth.register.name') }}</Label>
+                    <Input id="name" type="text" autofocus :tabindex="1" autocomplete="name" v-model="form.name" placeholder="Chris Doe" />
                     <InputError :message="form.errors.name" />
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="email">{{ trans.email }}</Label>
+                    <Label for="email">{{ trans('auth.register.email') }}</Label>
                     <Input id="email" type="text" :tabindex="2" autocomplete="email" v-model="form.email" placeholder="email@example.com" />
                     <InputError :message="form.errors.email" />
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="role_id">{{ trans.role }}</Label>
+                    <Label for="role_id">{{ trans('auth.register.role') }}</Label>
                     <Select id="role_id" :tabindex="3" v-model="form.role_id">
                         <SelectTrigger class="w-full">
-                            <SelectValue :placeholder="trans.select_role" />
+                            <SelectValue :placeholder="trans('auth.register.select_role')" />
                         </SelectTrigger>
                         
                         <SelectContent>
@@ -70,7 +69,7 @@ const submit = () => {
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password">{{ trans.password }}</Label>
+                    <Label for="password">{{ trans('auth.register.password') }}</Label>
                     <Input
                         id="password"
                         type="password"
@@ -83,7 +82,7 @@ const submit = () => {
                 </div>
 
                 <div class="grid gap-2">
-                    <Label for="password_confirmation">{{ trans.password_confirmation }}</Label>
+                    <Label for="password_confirmation">{{ trans('auth.register.password_confirmation') }}</Label>
                     <Input
                         id="password_confirmation"
                         type="password"
@@ -97,13 +96,13 @@ const submit = () => {
 
                 <Button type="submit" class="mt-2 w-full" tabindex="6" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
-                    {{ trans.create_account }}
+                    {{ trans('auth.register.create_account') }}
                 </Button>
             </div>
 
             <div class="text-center text-sm text-muted-foreground">
-                {{ trans.have_account }}
-                <TextLink :href="route('login')" class="underline underline-offset-4" :tabindex="7">{{ trans.log_in }}</TextLink>
+                {{ trans('auth.register.have_account') }}
+                <TextLink :href="route('login')" class="underline underline-offset-4" :tabindex="7">{{ trans('auth.register.log_in') }}</TextLink>
             </div>
         </form>
     </AuthBase>

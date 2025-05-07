@@ -8,7 +8,7 @@ return [
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
     'login' => [
         'title' => 'Log in to your account',
-        'decription' => 'Enter your email and password below to log in',
+        'description' => 'Enter your email and password below to log in',
         'head' => 'Log in',
         'email' => 'Email address',
         'password' => 'Password',
