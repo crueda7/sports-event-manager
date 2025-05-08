@@ -4,19 +4,24 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
+import { trans } from '../../helpers/translate';
 
 const sidebarNavItems: NavItem[] = [
     {
-        title: 'Profile',
+        title: trans('settings.profile.nav'),
         href: '/settings/profile',
     },
     {
-        title: 'Password',
+        title: trans('settings.password.nav'),
         href: '/settings/password',
     },
     {
-        title: 'Appearance',
+        title: trans('settings.appearance.nav'),
         href: '/settings/appearance',
+    },
+    {
+        title: trans('settings.language.nav'),
+        href: '/settings/language',
     },
 ];
 
@@ -27,7 +32,7 @@ const currentPath = page.props.ziggy?.location ? new URL(page.props.ziggy.locati
 
 <template>
     <div class="px-4 py-6">
-        <Heading title="Settings" description="Manage your profile and account settings" />
+        <Heading :title="trans('settings.title')" :description="trans('settings.description')" />
 
         <div class="flex flex-col space-y-8 md:space-y-0 lg:flex-row lg:space-x-12 lg:space-y-0">
             <aside class="w-full max-w-xl lg:w-48">

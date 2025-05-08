@@ -1,0 +1,52 @@
+<?php
+declare(strict_types=1);
+
+return [
+    'title' => 'Settings',
+    'description' => 'Manage your profile and account settings',
+    'profile' => [
+        'nav' => 'Profile',
+        'breadcrumb' => 'Profile settings',
+        'title' => 'Profile information',
+        'description' => 'Update your name and email address',
+        'name' => 'Name',
+        'email' => 'Email address',
+        'email_unverified' => 'Your email address is unverified.',
+        'email_resend' => 'Click here to resend the verification email.',
+        'email_sent' => 'A new verification link has been sent to your email address.',
+        'saved' => 'Saved.',
+        'account' => 'account',
+        'delete_title' => 'Delete account',
+        'delete_description' => ' Delete your account and all of its resources',
+        'delete_warning_title' => 'Warning',
+        'delete_warning_description' => 'Please proceed with caution, this cannot be undone.',
+        'delete_confirmation_title' => 'Are you sure you want to delete your account?',
+        'delete_confirmation_description' => 'Once your account is deleted, all of its resources and data will also be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.',
+    ],
+    'password' => [
+        'nav' => 'Password',
+        'breadcrumb' => 'Password settings',
+        'title' => 'Update password',
+        'description' => 'Ensure your account is using a long, random password to stay secure',
+        'password_current' => 'Current password',
+        'password_new' => 'New password',
+        'password_confirm' => 'Comfim password',
+    ],
+    'appearance' => [
+        'nav' => 'Appearance',
+        'breadcrumb' => 'Appearance settings',
+        'title' => 'Appearance settings',
+        'description' => 'Update your account\'s appearance settings',
+        'light' => 'Light',
+        'dark' => 'Dark',
+        'system' => 'System',
+    ],
+    'language' => [
+        'nav' => 'Language',
+        'breadcrumb' => 'Language settings',
+        'title' => 'Language settings',
+        'description' => 'Set the application language',
+        'spanish' => 'Spanish',
+        'english' => 'English',
+    ],
+];

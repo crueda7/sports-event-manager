@@ -1,0 +1,52 @@
+<?php
+declare(strict_types=1);
+
+return [
+    'title' => 'Configuración',
+    'description' => 'Gestiona tu perfil y la configuración de tu cuenta',
+    'profile' => [
+        'nav' => 'Perfil',
+        'breadcrumb' => 'Configuración del perfil',
+        'title' => 'Información del perfil',
+        'description' => 'Actualiza tu nombre y dirección de correo electrónico',
+        'name' => 'Nombre',
+        'email' => 'Correo electrónico',
+        'email_unverified' => 'Tu dirección de email no está verificada',
+        'email_resend' => 'Haga clic aquí para reenviar el correo de verificación',
+        'email_sent' => 'Se ha enviado un nuevo enlace de verificación a su dirección de correo electrónico',
+        'saved' => 'Guardado',
+        'account' => 'cuenta',
+        'delete_title' => 'Eliminar cuenta',
+        'delete_description' => 'Borra tu cuenta y todos sus recursos',
+        'delete_warning_title' => 'Advertencia',
+        'delete_warning_description' => 'Por favor, proceda con precaución, esto no se puede deshacer',
+        'delete_confirmation_title' => '¿Está seguro de que desea eliminar su cuenta?',
+        'delete_confirmation_description' => 'Una vez que su cuenta es eliminada, todos sus recursos y datos también serán eliminados permanentemente. Por favor, introduzca su contraseña para confirmar que desea eliminar permanentemente su cuenta',
+    ],
+    'password' => [
+        'nav' => 'Contraseña',
+        'breadcrumb' => 'Configuración de contraseña',
+        'title' => 'Actualizar contraseña',
+        'description' => 'Asegúrese de que su cuenta utiliza una contraseña larga y aleatoria para mantenerse seguro',
+        'password_current' => 'Contraseña actual',
+        'password_new' => 'Nueva contraseña',
+        'password_confirm' => 'Confirmar contraseña',
+    ],
+    'appearance' => [
+        'nav' => 'Apariencia',
+        'breadcrumb' => 'Ajustes de apariencia',
+        'title' => 'Configuración de apariencia',
+        'description' => 'Actualiza la configuración de apariencia de tu cuenta',
+        'light' => 'Claro',
+        'dark' => 'Oscuro',
+        'system' => 'Sistema',
+    ],
+    'language' => [
+        'nav' => 'Idioma',
+        'breadcrumb' => 'Configuración de idioma',
+        'title' => 'Configuración del idioma',
+        'description' => 'Configura el idioma de la aplicación',
+        'spanish' => 'Español',
+        'english' => 'Inglés',
+    ],
+];

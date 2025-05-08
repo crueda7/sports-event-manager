@@ -4,6 +4,7 @@ import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSep
 import type { User } from '@/types';
 import { Link } from '@inertiajs/vue3';
 import { LogOut, Settings } from 'lucide-vue-next';
+import { trans } from '../helpers/translate';
 
 interface Props {
     user: User;
@@ -23,7 +24,7 @@ defineProps<Props>();
         <DropdownMenuItem :as-child="true">
             <Link class="block w-full" :href="route('profile.edit')" as="button">
                 <Settings class="mr-2 h-4 w-4" />
-                Settings
+                {{ trans('app.sidebar.settings') }}
             </Link>
         </DropdownMenuItem>
     </DropdownMenuGroup>
@@ -31,7 +32,7 @@ defineProps<Props>();
     <DropdownMenuItem :as-child="true">
         <Link class="block w-full" method="post" :href="route('logout')" as="button">
             <LogOut class="mr-2 h-4 w-4" />
-            Log out
+            {{ trans('app.sidebar.log_out') }}
         </Link>
     </DropdownMenuItem>
 </template>

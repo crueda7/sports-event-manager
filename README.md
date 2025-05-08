@@ -60,7 +60,6 @@ Ejecutar los seeders:
 `php artisan db:seed`
 
 Inicializar el proyecto:  
-`php artisan serve`  
-`npm run dev`
+`composer run dev`
 
 Ahora puede visualizar el proyecto en su navegador de preferencia con el puerto [8000](http://127.0.0.1:8000).

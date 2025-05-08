@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\File;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -50,6 +52,27 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            'translations' => fn () => $this->loadTranslations(),
+            'appLocale' => fn () => App::getLocale(),
         ];
+    }
+
+    protected function loadTranslations(): array
+    {
+        $locale = App::getLocale();
+        $path = lang_path($locale);
+
+        if (!File::exists($path)) {
+            return [];
+        }
+
+        $translations = [];
+
+        foreach (File::allFiles($path) as $file) {
+            $name = $file->getFilenameWithoutExtension();
+            $translations[$name] = trans($name);
+        }
+
+        return $translations;
     }
 }
