@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -35,17 +36,15 @@ class RoleController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        Role::create($request->all());
+        try {
+            Role::create($request->all());
 
-        return redirect()->route('roles.index');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+            return redirect()->route('roles.index');
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -67,9 +66,15 @@ class RoleController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $role->update($request->all());
+        try {
+            $role->update($request->all());
 
-        return redirect()->route('roles.index');
+            return redirect()->route('roles.index');
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -77,10 +82,14 @@ class RoleController extends Controller
      */
     public function destroy(Role $role)
     {
-        $role->delete();
+        try {
+            $role->delete();
 
-        return Inertia::render('roles/Index', [
-            'roles' => Role::all()
-        ]);
+            return Inertia::location(route('roles.index'));
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

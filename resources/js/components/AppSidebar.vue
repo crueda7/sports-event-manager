@@ -1,48 +1,35 @@
 <script setup lang="ts">
-import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, UserRoundCog, UsersRound } from 'lucide-vue-next';
+import { LayoutGrid, UserRoundCog, UsersRound } from 'lucide-vue-next';
 import AppLogo from './AppLogo.vue';
 import { computed } from 'vue';
 import type { SharedData } from '@/types';
+import { trans } from '../helpers/translate';
 
 const { props } = usePage<SharedData>();
 const role = computed(() => props.auth?.role ?? '');
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Dashboard',
+        title: trans('app.sidebar.dashboard'),
         href: '/dashboard',
         icon: LayoutGrid,
     },
     {
-        title: 'Roles',
+        title: trans('app.sidebar.roles'),
         href: '/roles',
         icon: UserRoundCog,
         roles: ['Administrator'],
     },
     {
-        title: 'Users',
+        title: trans('app.sidebar.users'),
         href: '/users',
         icon: UsersRound,
         roles: ['Administrator'],
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Github Repo',
-        href: 'https://github.com/crueda7/sports-event-manager',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
     },
 ];
 
@@ -72,7 +59,6 @@ const filteredNavItems = computed(() =>
         </SidebarContent>
 
         <SidebarFooter>
-            <NavFooter :items="footerNavItems" />
             <NavUser />
         </SidebarFooter>
     </Sidebar>
