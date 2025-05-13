@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
+import Alert from '@/components/Alert.vue';
 import { Head, usePage, useForm } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -10,6 +11,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { type SharedData, type Role } from '@/types';
 import { computed } from 'vue';
 import { trans } from '../../helpers/translate';
+import { showMessage } from '@/composables/useAlert';
+
+const module = trans('form.users.module');
 
 interface RolePageProps extends SharedData {
     roles: Role[];
@@ -32,8 +36,23 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: trans('actions.create'), href: '#' }
 ];
 
-const submit = () => {
-    form.post(route('users.store'), {
+const createUser = async () => {  
+    form.post('/users', {
+        preserveScroll: true,
+        onSuccess: () => {
+            showMessage({
+                title: trans('messages.success'),
+                description: trans('messages.success_create', {'module': module}),
+                variant: 'success',
+            });
+        },
+        onError: () => {
+            showMessage({
+                title: trans('messages.error'),
+                description: trans('messages.error_create', {'module': module}),
+                variant: 'error',
+            });
+        },
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
@@ -43,8 +62,10 @@ const submit = () => {
     <Head :title="trans('form.users.title_create')"></Head>
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <Alert />
+
         <div class="flex flex-1 flex-col gap-4 rounded-xl p-4">
-            <form @submit.prevent="submit" class="space-y-6 max-w-lg">
+            <form @submit.prevent="createUser" class="space-y-6 max-w-lg">
                 <div class="space-y-2">
                     <Label for="name">{{ trans('form.users.name') }}</Label>
                     <Input id="name" type="text" tabindex="1" autocomplete="name" v-model="form.name" placeholder="Chris Doe" />
@@ -53,7 +74,7 @@ const submit = () => {
 
                 <div class="grid gap-2">
                     <Label for="email">{{ trans('form.users.email') }}</Label>
-                    <Input id="email" type="email" tabindex="2" autocomplete="email" v-model="form.email" placeholder="email@example.com" />
+                    <Input id="email" type="text" tabindex="2" autocomplete="email" v-model="form.email" placeholder="email@example.com" />
                     <InputError :message="form.errors.email" />
                 </div>
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
+import Alert from '@/components/Alert.vue';
 import { Head, usePage, useForm } from '@inertiajs/vue3';
 import { SharedData, Role } from '@/types';
 import { Button } from '@/components/ui/button';
@@ -9,6 +10,9 @@ import InputError from '@/components/InputError.vue';
 import { LoaderCircle } from 'lucide-vue-next';
 import { computed } from 'vue';
 import { trans } from '../../helpers/translate';
+import { showMessage } from '@/composables/useAlert';
+
+const module = trans('form.roles.module');
 
 interface RolePageProps extends SharedData {
     role: Role;
@@ -27,8 +31,25 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: trans('actions.edit'), href: '#' }
 ];
 
-const submit = () => {
+const updateRole = async () => {
+    if (!role.value.id) return;
+
     form.put(`/roles/${role.value.id}`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            showMessage({
+                title: trans('messages.success'),
+                description: trans('messages.success_update', {'module': module}),
+                variant: 'success',
+            });
+        },
+        onError: () => {
+            showMessage({
+                title: trans('messages.error'),
+                description: trans('messages.error_update', {'module': module}),
+                variant: 'error',
+            });
+        },
         onFinish: () => form.reset('name'),
     });
 };
@@ -38,8 +59,10 @@ const submit = () => {
     <Head :title="trans('form.roles.title_edit')"></Head>
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <Alert />
+
         <div class="flex flex-1 flex-col gap-4 rounded-xl p-4">
-            <form @submit.prevent="submit" class="space-y-6 max-w-lg">
+            <form @submit.prevent="updateRole" class="space-y-6 max-w-lg">
                 <div class="space-y-2">
                     <Label for="name">{{ trans('form.roles.name') }}</Label>
                     <Input id="name" type="text" required tabindex="1" autocomplete="name" v-model="form.name" :placeholder="trans('form.roles.name')" />

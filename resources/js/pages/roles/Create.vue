@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
+import Alert from '@/components/Alert.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -7,7 +8,9 @@ import { Input } from '@/components/ui/input';
 import InputError from '@/components/InputError.vue';
 import { LoaderCircle } from 'lucide-vue-next';
 import { trans } from '../../helpers/translate';
+import { showMessage } from '@/composables/useAlert';
 
+const module = trans('form.roles.module');
 const form = useForm({
     name: '',
 });
@@ -18,8 +21,23 @@ const breadcrumbs: BreadcrumbItem[] = [
     { title: trans('actions.create'), href: '#' }
 ];
 
-const submit = () => {
+const createRole = async () => {  
     form.post('/roles', {
+        preserveScroll: true,
+        onSuccess: () => {
+            showMessage({
+                title: trans('messages.success'),
+                description: trans('messages.success_create', {'module': module}),
+                variant: 'success',
+            });
+        },
+        onError: () => {
+            showMessage({
+                title: trans('messages.error'),
+                description: trans('messages.error_create', {'module': module}),
+                variant: 'error',
+            });
+        },
         onFinish: () => form.reset('name'),
     });
 };
@@ -29,8 +47,10 @@ const submit = () => {
     <Head :title="trans('form.roles.title_create')"></Head>
 
     <AppLayout :breadcrumbs="breadcrumbs">
+        <Alert />
+
         <div class="flex flex-1 flex-col gap-4 rounded-xl p-4">
-            <form @submit.prevent="submit" class="space-y-6 max-w-lg">
+            <form @submit.prevent="createRole" class="space-y-6 max-w-lg">
                 <div class="space-y-2">
                     <Label for="name">{{ trans('form.roles.name') }}</Label>
                     <Input id="name" type="text" required tabindex="1" autocomplete="name" v-model="form.name" :placeholder="trans('form.roles.name')" />

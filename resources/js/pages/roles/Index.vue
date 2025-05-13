@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
-import { Head, usePage, Link, useForm, router } from '@inertiajs/vue3';
+import Alert from '@/components/Alert.vue';
+import { Head, usePage, Link, useForm } from '@inertiajs/vue3';
 import { type BreadcrumbItem, type SharedData, type Role } from '@/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -8,7 +9,9 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Pencil, Trash, CirclePlus } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { trans } from '../../helpers/translate';
+import { showMessage } from '@/composables/useAlert';
 
+const module = trans('form.roles.module');
 const form = useForm({});
 const deleteRoleId = ref<number | null>(null);
 
@@ -21,18 +24,24 @@ const roles = computed(() => props.roles);
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: trans('form.roles.breadcrumb'), href: '/roles' }];
 
-const deleteRole = async (e: Event) => {
-    e.preventDefault();
-
+const deleteRole = async () => {
     if (!deleteRoleId.value) return;
 
     form.delete(`/roles/${deleteRoleId.value}`, {
         preserveScroll: true,
         onSuccess: () => {
-            router.visit('/roles', { replace: true });
+            showMessage({
+                title: trans('messages.success'),
+                description: trans('messages.success_delete', {'module': module}),
+                variant: 'success',
+            });
         },
-        onError: (e) => {
-            console.error('Error: ', e);
+        onError: () => {
+            showMessage({
+                title: trans('messages.error'),
+                description: trans('messages.error_delete', {'module': module}),
+                variant: 'error',
+            });
         },
     });
 }
@@ -49,6 +58,8 @@ const deleteRole = async (e: Event) => {
                 </Button>
             </div>
         </div>
+
+        <Alert />
 
         <div class="rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min mx-4">
             <Table>
@@ -77,8 +88,9 @@ const deleteRole = async (e: Event) => {
                                         <Trash/>
                                     </Button>
                                 </DialogTrigger>
+
                                 <DialogContent>
-                                    <form class="space-y-6" @submit="deleteRole">
+                                    <form class="space-y-6" @submit.prevent="deleteRole">
                                         <DialogHeader class="space-y-3">
                                             <DialogTitle>{{ trans('form.roles.delete_confirmation_title') }}</DialogTitle>
                                             <DialogDescription>
@@ -91,9 +103,11 @@ const deleteRole = async (e: Event) => {
                                                 <Button variant="secondary"> {{ trans('actions.cancel') }} </Button>
                                             </DialogClose>
 
-                                            <Button variant="destructive">
-                                                <button type="submit">{{ trans('form.roles.title_delete') }}</button>
-                                            </Button>
+                                            <DialogClose as-child>
+                                                <Button variant="destructive">
+                                                    <button type="submit">{{ trans('form.roles.title_delete') }}</button>
+                                                </Button>
+                                            </DialogClose>
                                         </DialogFooter>
                                     </form>
                                 </DialogContent>

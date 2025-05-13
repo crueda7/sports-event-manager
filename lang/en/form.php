@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 return [
     'roles' => [
+        'module' => 'Role',
         'title' => 'Roles',
         'title_create' => 'Create role',
         'title_edit' => 'Edit role',
@@ -16,6 +17,7 @@ return [
         'actions' => 'Actions',
     ],
     'users' => [
+        'module' => 'User',
         'title' => 'Users',
         'title_create' => 'Create user',
         'title_edit' => 'Edit user',

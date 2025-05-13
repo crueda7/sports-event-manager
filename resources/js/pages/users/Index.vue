@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
+import Alert from '@/components/Alert.vue';
 import { Head, usePage, Link, useForm, router } from '@inertiajs/vue3';
 import { type BreadcrumbItem, type SharedData, type User } from '@/types';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -8,7 +9,9 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Pencil, Trash, CirclePlus } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 import { trans } from '../../helpers/translate';
+import { showMessage } from '@/composables/useAlert';
 
+const module = trans('form.users.module');
 const form = useForm({});
 const deleteUserId = ref<number | null>(null);
 
@@ -21,18 +24,24 @@ const users = computed(() => props.users);
 
 const breadcrumbs: BreadcrumbItem[] = [{ title: trans('form.users.breadcrumb'), href: '/users' }];
 
-const deleteUser = async (e: Event) => {
-    e.preventDefault();
-
+const deleteUser = async () => {
     if (!deleteUserId.value) return;
 
     form.delete(`/users/${deleteUserId.value}`, {
         preserveScroll: true,
         onSuccess: () => {
-            router.visit('/users', { replace: true });
+            showMessage({
+                title: trans('messages.success'),
+                description: trans('messages.success_delete', {'module': module}),
+                variant: 'success',
+            });
         },
-        onError: (e) => {
-            console.error('Error: ', e);
+        onError: () => {
+            showMessage({
+                title: trans('messages.error'),
+                description: trans('messages.error_delete', {'module': module}),
+                variant: 'error',
+            });
         },
     });
 }
@@ -49,6 +58,8 @@ const deleteUser = async (e: Event) => {
                 </Button>
             </div>
         </div>
+
+        <Alert />
 
         <div class="rounded-xl border border-sidebar-border/70 dark:border-sidebar-border md:min-h-min mx-4">
             <Table>
@@ -81,8 +92,9 @@ const deleteUser = async (e: Event) => {
                                         <Trash/>
                                     </Button>
                                 </DialogTrigger>
+
                                 <DialogContent>
-                                    <form class="space-y-6" @submit="deleteUser">
+                                    <form class="space-y-6" @submit.prevent="deleteUser">
                                         <DialogHeader class="space-y-3">
                                             <DialogTitle>{{ trans('form.users.delete_confirmation_title') }}</DialogTitle>
                                             <DialogDescription>
