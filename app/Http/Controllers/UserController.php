@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 
@@ -46,9 +48,17 @@ class UserController extends Controller
             'role_id' => 'required|exists:roles,id',
         ]);
 
-        User::create($request->all());
+        try {
+            User::create($request->all());
 
-        return redirect()->route('users.index');
+            return redirect()->route('users.index');
+        } catch (ValidationException $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -90,9 +100,15 @@ class UserController extends Controller
             unset($validated['password']);
         }
 
-        $user->update($validated);
+        try {
+            $user->update($validated);
 
-        return redirect()->route('users.index');
+            return redirect()->route('users.index');
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
@@ -100,10 +116,14 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        try {
+            $user->delete();
 
-        return Inertia::render('users/Index', [
-            'users' => User::all()
-        ]);
+            return Inertia::location(route('users.index'));
+        } catch (\Throwable $e) {
+            return redirect()->back()->withErrors([
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 }

@@ -29,6 +29,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
+    role: { id: number; name: string };
     role_id: number,
     avatar?: string;
     email_verified_at: string | null;
