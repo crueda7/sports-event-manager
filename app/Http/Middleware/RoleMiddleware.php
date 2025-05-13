@@ -15,7 +15,7 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        $userRole = $request->user()?->role?->name;
+        $userRole = $request->user()?->role?->id;
         
         if (!auth()->check() || !in_array($userRole, $roles)) {
             abort(403, 'Unauthorized');

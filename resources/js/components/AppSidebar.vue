@@ -11,7 +11,7 @@ import type { SharedData } from '@/types';
 import { trans } from '../helpers/translate';
 
 const { props } = usePage<SharedData>();
-const role = computed(() => props.auth?.role ?? '');
+const role = computed(() => Number(props.auth?.role ?? null));
 
 const mainNavItems: NavItem[] = [
     {
@@ -23,13 +23,13 @@ const mainNavItems: NavItem[] = [
         title: trans('app.sidebar.roles'),
         href: '/roles',
         icon: UserRoundCog,
-        roles: ['Administrator'],
+        roles: [1],
     },
     {
         title: trans('app.sidebar.users'),
         href: '/users',
         icon: UsersRound,
-        roles: ['Administrator'],
+        roles: [1],
     },
 ];
 
